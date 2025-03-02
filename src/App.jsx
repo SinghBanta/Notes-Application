@@ -62,7 +62,7 @@ const App = () => {
             <div className="absolute -inset-4 bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-2xl blur-2xl"></div>
             <img 
               className="relative w-full lg:w-130 h-auto lg:h-135 rounded-lg transition-transform duration-500 mx-auto" 
-              src="public/creative.png" 
+              src="/creative.png" 
               alt="Capture Everything in One Place" 
             />
           </div>
