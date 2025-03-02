@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { FaFileAlt, FaVideo, FaMicrophone, FaShareAlt } from 'react-icons/fa';
 import './index.css';
 
+
 const App = () => {
   const containerVariants = {
     hidden: { opacity: 0 },
