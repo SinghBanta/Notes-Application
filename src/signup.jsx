@@ -1,12 +1,39 @@
-import React from 'react';
+
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import axios from "axios";
+import { Link,useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+
 
 const Signup = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    window.location.href = "/";
-  };
+
+  const [username,setUsername]=useState('');
+  const [email,setEmail]=useState('');
+  const [password,setPassword]=useState('');
+  const navigate = useNavigate();
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('http://127.0.0.1:3000/api/auth/register', { 
+        username,  
+        email,
+        password
+      });
+      
+      console.log('Registration successful:', response.data);
+      toast.success("Registration successful!");
+      navigate('/login');
+    } catch (err) {
+      console.error('Registration error:', err?.response?.data ?? err.message ?? err);
+      const message = err?.response?.data?.error?.message || 'User already exists, try again.';
+      toast.error(message);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
@@ -35,42 +62,29 @@ const Signup = () => {
 
             {/* Signup Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Name Inputs */}
-              <div className="grid grid-cols-2 gap-3">
+              
+              
                 {/* First Name */}
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-300 mb-1">
-                    First Name
+                  <label htmlFor="username" className="block text-sm font-medium text-gray-300 mb-1">
+                    Username
                   </label>
                   <div className="relative group">
                     <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-purple-500 rounded-lg blur opacity-0 group-hover:opacity-10 transition duration-200"></div>
                     <input
                       type="text"
-                      id="firstName"
-                      placeholder="First name"
-                      className="relative w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-500 text-gray-300 placeholder-gray-500 text-sm"
-                      required
-                    />
-                  </div>
-                </div>
+                      id="username" 
+                      // value={username}
+                      name="username"
+                      onChange={(e)=>setUsername(e.target.value)}
+                      placeholder="username"
 
-                {/* Last Name */}
-                <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-300 mb-1">
-                    Last Name
-                  </label>
-                  <div className="relative group">
-                    <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-purple-500 rounded-lg blur opacity-0 group-hover:opacity-10 transition duration-200"></div>
-                    <input
-                      type="text"
-                      id="lastName"
-                      placeholder="Last name"
                       className="relative w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-500 text-gray-300 placeholder-gray-500 text-sm"
                       required
                     />
                   </div>
                 </div>
-              </div>
+              
 
               {/* Email Input */}
               <div>
@@ -78,11 +92,14 @@ const Signup = () => {
                   Email Address
                 </label>
                 <div className="relative group">
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-purple-500 rounded-lg blur opacity-0 group-hover:opacity-10 transition duration-200"></div>
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-purple-500 rounded-lg blur opacity-0 group-hover:opacity-10 transition duration-200 w-full"></div>
                   <input
                     type="email"
                     id="email"
                     placeholder="Enter your email"
+                    // value={email}
+                    name='email'
+                    onChange={(e)=>setEmail(e.target.value)}
                     className="relative w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-500 text-gray-300 placeholder-gray-500 text-sm"
                     required
                   />
@@ -100,31 +117,19 @@ const Signup = () => {
                     type="password"
                     id="password"
                     placeholder="Create a password"
+                    // value={password}
+                    name='password'
+                    onChange={(e)=>setPassword(e.target.value)}
                     className="relative w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-500 text-gray-300 placeholder-gray-500 text-sm"
                     required
                   />
                 </div>
               </div>
 
-              {/* Confirm Password Input */}
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-1">
-                  Confirm Password
-                </label>
-                <div className="relative group">
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-pink-500 to-purple-500 rounded-lg blur opacity-0 group-hover:opacity-10 transition duration-200"></div>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    placeholder="Confirm your password"
-                    className="relative w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-500 text-gray-300 placeholder-gray-500 text-sm"
-                    required
-                  />
-                </div>
-              </div>
+              
 
               {/* Terms and Conditions */}
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <input
                   id="terms"
                   type="checkbox"
@@ -137,7 +142,7 @@ const Signup = () => {
                     Terms and Conditions
                   </a>
                 </label>
-              </div>
+              </div> */}
 
               {/* Submit Button */}
               <motion.button
@@ -159,8 +164,7 @@ const Signup = () => {
                 </Link>
               </p>
 
-              
-              
+            
             </form>
 
             

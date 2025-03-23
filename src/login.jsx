@@ -1,12 +1,37 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
+
 
 const Login = () => {
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      window.location.href = "/";
-    };
+
+  const [email,setEmail]=useState('');
+  const [password,setPassword]=useState('');
+  const navigate = useNavigate();
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/login', {  
+        email, 
+        password 
+      });
+      
+      console.log('Login successful:', response.data);
+      toast.success("Login successful!");
+      navigate('/app'); // Redirect after success
+    } catch (err) {
+      console.error('Login error:', err);
+      const message = (err.response && err.response.data && err.response.data.message) || 'Wrong Password, try again.';
+      toast.error(message);
+    }
+  }
+
 
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
@@ -46,6 +71,9 @@ const Login = () => {
                       type="email"
                       id="email"
                       placeholder="Enter your email"
+                      // value={email}
+                      name='email'
+                      onChange={(e)=>setEmail(e.target.value)}
                       className="relative w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-500 text-gray-300 placeholder-gray-500 text-sm"
                       required
                     />
@@ -62,6 +90,9 @@ const Login = () => {
                     <input
                       type="password"
                       id="password"
+                      // value={password}
+                      name='password'
+                      onChange={(e)=>setPassword(e.target.value)}
                       placeholder="Enter your password"
                       className="relative w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg focus:outline-none focus:border-rose-500 text-gray-300 placeholder-gray-500 text-sm"
                       required
@@ -69,24 +100,7 @@ const Login = () => {
                   </div>
                 </div>
 
-                {/* Remember Me & Forgot Password */}
-                <div className="flex items-center justify-between text-xs">
-                  <div className="flex items-center">
-                    <input
-                      id="remember-me"
-                      type="checkbox"
-                      className="h-3 w-3 rounded border-gray-700 bg-gray-800 text-rose-500 focus:ring-rose-500"
-                    />
-                    <label htmlFor="remember-me" className="ml-2 block text-gray-400">
-                      Remember me
-                    </label>
-                  </div>
-                  <div>
-                    <a href="#" className="text-rose-500 hover:text-rose-400 transition-colors">
-                      Forgot password?
-                    </a>
-                  </div>
-                </div>
+                
 
                 {/* Submit Button */}
                 <button
@@ -145,8 +159,7 @@ const Login = () => {
               </form>
 
               {/* Sign Up Link */}
-              <p className="mt-4 text-center text-xs text-gray-400">
-                Don't have an account?{' '}
+              <p className="mt-4 text-center text-xs text-gray-400">Don&apos;t have an account?{' '}
                 <Link to="/signup" className="text-rose-500 hover:text-rose-400 font-semibold transition-colors">
                   Sign up for free
                 </Link>
