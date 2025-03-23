@@ -19,7 +19,7 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://127.0.0.1:3000/api/auth/register', { 
+      const response = await axios.post(import.meta.env.VITE_USER_SIGNUP, { 
         username,  
         email,
         password
