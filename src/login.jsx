@@ -17,14 +17,15 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(import.meta.env.USER_LOGIN, {  
+      console.log("Environment variable USER_PATH:", import.meta.env.VITE_LOGIN_PATH);
+      const response = await axios.post(import.meta.env.VITE_LOGIN_PATH, {  
         email, 
         password 
       });
       
       console.log('Login successful:', response.data);
       toast.success("Login successful!");
-      navigate('/app'); // Redirect after success
+      navigate('/'); // Redirect after success
     } catch (err) {
       console.error('Login error:', err);
       const message = (err.response && err.response.data && err.response.data.message) || 'Wrong Password, try again.';

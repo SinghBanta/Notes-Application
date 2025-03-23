@@ -19,7 +19,8 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(import.meta.env.VITE_USER_SIGNUP, { 
+      console.log("Environment variable USER_PATH:", import.meta.env.VITE_SIGNUP_PATH);
+      const response = await axios.post(import.meta.env.VITE_SIGNUP_PATH, { 
         username,  
         email,
         password
@@ -29,7 +30,7 @@ const Signup = () => {
       toast.success("Registration successful!");
       navigate('/login');
     } catch (err) {
-      console.error('Registration error:', err?.response?.data ?? err.message ?? err);
+      console.error('Registration error:', err.response?.data ?? err.message ?? 'An unknown error occurred');
       const message = err?.response?.data?.error?.message || 'User already exists, try again.';
       toast.error(message);
     }
